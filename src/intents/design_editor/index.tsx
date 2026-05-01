@@ -5,8 +5,15 @@ import type { DesignEditorIntent } from "@canva/intents/design";
 import { createRoot } from "react-dom/client";
 import { App } from "./app";
 
+let root: ReturnType<typeof createRoot> | undefined;
+
 async function render() {
-  const root = createRoot(document.getElementById("root") as Element);
+  const rootElement = document.getElementById("root");
+  if (!rootElement) return;
+
+  if (!root) {
+    root = createRoot(rootElement);
+  }
 
   root.render(
     <AppI18nProvider>

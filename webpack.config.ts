@@ -1,11 +1,14 @@
 import type { Configuration } from "webpack";
-import { DefinePlugin, optimize } from "webpack";
+import { createRequire } from "module";
+const _require = createRequire(import.meta.url);
+const webpack = _require("webpack");
+const { DefinePlugin, optimize } = webpack;
 import path from "path";
 import TerserPlugin from "terser-webpack-plugin";
 import { transform } from "@formatjs/ts-transformer";
 import chalk from "chalk";
 import { config } from "dotenv";
-import { Configuration as DevServerConfiguration } from "webpack-dev-server";
+type DevServerConfiguration = import("webpack-dev-server").Configuration;
 
 config();
 
@@ -23,10 +26,12 @@ export function buildConfig({
   devConfig,
   appEntry = path.join(process.cwd(), "src", "index.tsx"),
   backendHost = process.env.CANVA_BACKEND_HOST,
+  frontendHost = process.env.CANVA_FRONTEND_HOST,
 }: {
   devConfig?: DevConfig;
   appEntry?: string;
   backendHost?: string;
+  frontendHost?: string;
 } = {}): Configuration & DevServerConfiguration {
   const mode = devConfig ? "development" : "production";
 
@@ -100,7 +105,7 @@ export function buildConfig({
               loader: "postcss-loader",
               options: {
                 postcssOptions: {
-                  plugins: [require("cssnano")({ preset: "default" })],
+                  plugins: [_require("cssnano")({ preset: "default" })],
                 },
               },
             },
@@ -142,7 +147,7 @@ export function buildConfig({
               loader: "postcss-loader",
               options: {
                 postcssOptions: {
-                  plugins: [require("cssnano")({ preset: "default" })],
+                  plugins: [_require("cssnano")({ preset: "default" })],
                 },
               },
             },
@@ -171,6 +176,7 @@ export function buildConfig({
     plugins: [
       new DefinePlugin({
         BACKEND_HOST: JSON.stringify(backendHost),
+        FRONTEND_HOST: JSON.stringify(frontendHost),
       }),
       // Apps can only submit a single JS file via the developer portal
       new optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
