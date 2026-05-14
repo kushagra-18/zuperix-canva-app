@@ -5,10 +5,20 @@ type ContainerTypes = "category" | "collection";
 
 export const useConfig = (facets?: any): Config<ContainerTypes> => {
   const intl = useIntl();
-  
-  const categoriesOptions = facets?.category_paths?.map((b: any) => ({ value: b.value, label: b.label })) || [];
-  const tagsOptions = facets?.tag_uuids?.map((b: any) => ({ value: b.value, label: b.label })) || [];
-  const ratingOptions = facets?.average_rating?.map((b: any) => ({ value: String(b.value), label: b.label })) || [];
+
+  const categoriesOptions =
+    facets?.category_paths?.map((b: any) => ({
+      value: b.value,
+      label: b.label,
+    })) || [];
+  const tagsOptions =
+    facets?.tag_uuids?.map((b: any) => ({ value: b.value, label: b.label })) ||
+    [];
+  const ratingOptions =
+    facets?.average_rating?.map((b: any) => ({
+      value: String(b.value),
+      label: b.label,
+    })) || [];
 
   return {
     serviceName: "Zuperix DAM",
@@ -17,26 +27,34 @@ export const useConfig = (facets?: any): Config<ContainerTypes> => {
       filterFormConfig: {
         containerTypes: ["category", "collection"],
         filters: [
-          ...(categoriesOptions.length > 0 ? [{
-            filterType: "CHECKBOX",
-            label: intl.formatMessage({
-              defaultMessage: "Categories",
-              description: "Label for categories filter",
-            }),
-            key: "category_paths",
-            options: categoriesOptions,
-            allowCustomValue: false,
-          }] : []),
-          ...(tagsOptions.length > 0 ? [{
-            filterType: "CHECKBOX",
-            label: intl.formatMessage({
-              defaultMessage: "Tags",
-              description: "Label for tags filter",
-            }),
-            key: "tag_uuids",
-            options: tagsOptions,
-            allowCustomValue: false,
-          }] : []),
+          ...(categoriesOptions.length > 0
+            ? [
+                {
+                  filterType: "CHECKBOX",
+                  label: intl.formatMessage({
+                    defaultMessage: "Categories",
+                    description: "Label for categories filter",
+                  }),
+                  key: "category_paths",
+                  options: categoriesOptions,
+                  allowCustomValue: false,
+                },
+              ]
+            : []),
+          ...(tagsOptions.length > 0
+            ? [
+                {
+                  filterType: "CHECKBOX",
+                  label: intl.formatMessage({
+                    defaultMessage: "Tags",
+                    description: "Label for tags filter",
+                  }),
+                  key: "tag_uuids",
+                  options: tagsOptions,
+                  allowCustomValue: false,
+                },
+              ]
+            : []),
           {
             filterType: "CHECKBOX",
             label: intl.formatMessage({
@@ -89,11 +107,14 @@ export const useConfig = (facets?: any): Config<ContainerTypes> => {
               description: "Label for average rating filter",
             }),
             key: "average_rating",
-            options: ratingOptions.length > 0 ? ratingOptions : [
-              { value: "5", label: "5 Stars" },
-              { value: "4", label: "4 Stars or above" },
-              { value: "3", label: "3 Stars or above" },
-            ],
+            options:
+              ratingOptions.length > 0
+                ? ratingOptions
+                : [
+                    { value: "5", label: "5 Stars" },
+                    { value: "4", label: "4 Stars or above" },
+                    { value: "3", label: "3 Stars or above" },
+                  ],
             allowCustomValue: false,
           },
         ],

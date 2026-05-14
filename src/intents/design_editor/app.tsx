@@ -1,6 +1,7 @@
 import * as React from "react";
 import { SearchableListView } from "@canva/app-components";
 import { Box, Button, Rows, Text, Title } from "@canva/app-ui-kit";
+import { FormattedMessage } from "react-intl";
 import "@canva/app-ui-kit/styles.css";
 import { useConfig } from "./config";
 import { findResources, connectAccount } from "./adapter";
@@ -12,8 +13,7 @@ export const App = () => {
   const [facets, setFacets] = React.useState<any>(null);
   const config = useConfig(facets);
 
-  React.useEffect(() => {
-  }, []);
+  React.useEffect(() => {}, []);
 
   const handleConnect = async () => {
     const success = await connectAccount();
@@ -35,20 +35,31 @@ export const App = () => {
         <Rows spacing="32" align="center">
           <Rows spacing="12" align="center">
             <Title size="large" alignment="center">
-              Connect Zuperix
+              <FormattedMessage
+                defaultMessage="Connect Zuperix"
+                description="Heading for the connection screen"
+              />
             </Title>
             <Text size="medium" alignment="center">
-              Access your Zuperix assets directly in Canva by connecting your
-              account.
+              <FormattedMessage
+                defaultMessage="Access your Zuperix assets directly in Canva by connecting your account."
+                description="Description of why the user needs to connect their account"
+              />
             </Text>
           </Rows>
 
           <Button variant="primary" onClick={handleConnect} fullWidth>
-            Connect Zuperix
+            <FormattedMessage
+              defaultMessage="Connect Zuperix"
+              description="Label for the button to connect account"
+            />
           </Button>
 
           <Text size="xsmall" tone="secondary" alignment="center">
-            You will be redirected to Zuperix to authorize this application.
+            <FormattedMessage
+              defaultMessage="You will be redirected to Zuperix to authorize this application."
+              description="Notice about redirection to external service"
+            />
           </Text>
         </Rows>
       </Box>
@@ -61,7 +72,7 @@ export const App = () => {
         config={config}
         findResources={async (req) => {
           const res = await findResources(req);
-          
+
           if (res.type === "SUCCESS" && (res as any).facets) {
             setFacets((res as any).facets);
           }

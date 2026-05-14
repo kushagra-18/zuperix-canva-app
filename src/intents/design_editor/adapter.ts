@@ -26,7 +26,7 @@ export async function findResources(
     });
     const body = await response.json();
 
-    if (response.status === 401 && body.message === 'CANVA_NOT_CONNECTED') {
+    if (response.status === 401 && body.message === "CANVA_NOT_CONNECTED") {
       return {
         type: "ERROR",
         errorCode: "CONFIGURATION_REQUIRED",
@@ -46,7 +46,7 @@ export async function findResources(
       type: "ERROR",
       errorCode: body.errorCode || "INTERNAL_ERROR",
     };
-  } catch (err) {
+  } catch {
     return {
       type: "ERROR",
       errorCode: "INTERNAL_ERROR",
@@ -64,9 +64,7 @@ export async function connectAccount() {
     });
 
     return true;
-  } catch (err) {
-    console.error('Failed to open login via Canva SDK:', err);
+  } catch {
     return false;
   }
 }
-
